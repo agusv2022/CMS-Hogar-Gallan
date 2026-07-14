@@ -1,10 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { Image } from 'astro:assets';
+
+// Las imágenes se IMPORTAN. Astro las procesa, las optimiza y les asigna
+// una URL con hash dentro de /_astro/. Nunca escribas "/src/images/..." en el
+// HTML: esa ruta solo existe en tu disco, no en el sitio publicado.
+import casa01 from '../images/casa-01.jpg';
+import casa02 from '../images/casa-02.jpg';
+import piscina01 from '../images/piscina-01.jpg';
+import exterior03 from '../images/exterior-03.jpg';
+import interior03 from '../images/interior-03.jpg';
+import cocina01 from '../images/cocina-01.jpg';
+import parrilla01 from '../images/parrilla-01.jpg';
+import dormitorio01 from '../images/dormitorio-01.jpg';
+import paisaje01 from '../images/paisaje-01.jpg';
+
+const galeria = [
+  { img: casa01, alt: 'Fachada principal de la casa', pie: 'Casa principal' },
+  { img: piscina01, alt: 'Piscina privada con solárium', pie: 'Piscina privada' },
+  { img: exterior03, alt: 'Terraza exterior con vistas a la sierra', pie: 'Terraza y jardín' },
+  { img: interior03, alt: 'Salón principal', pie: 'Salón' },
+  { img: cocina01, alt: 'Cocina completamente equipada', pie: 'Cocina' },
+  { img: parrilla01, alt: 'Zona de barbacoa y parrilla', pie: 'Parrilla' },
+  { img: dormitorio01, alt: 'Dormitorio principal', pie: 'Dormitorios' },
+  { img: paisaje01, alt: 'Sierra del Galiñeiro', pie: 'El entorno' },
+];
+
+const amenidades = [
+  { icon: 'piscina', titulo: 'Piscina privada', texto: 'Uso exclusivo, solárium y vistas a la sierra' },
+  { icon: 'parrilla', titulo: 'Barbacoa y parrilla', texto: 'Zona exterior equipada para asados' },
+  { icon: 'cocina', titulo: 'Cocina completa', texto: 'Horno, lavavajillas, cafetera y menaje' },
+  { icon: 'dormitorio', titulo: '4 dormitorios', texto: 'Hasta 8 huéspedes' },
+  { icon: 'wifi', titulo: 'WiFi de fibra', texto: 'Suficiente para teletrabajar' },
+  { icon: 'parking', titulo: 'Parking privado', texto: 'Espacio para varios vehículos' },
+  { icon: 'mascotas', titulo: 'Mascotas bienvenidas', texto: 'Jardín cerrado y seguro' },
+  { icon: 'bicicleta', titulo: 'Alquiler de bicicletas', texto: 'Senderos de la sierra desde la puerta' },
+];
 ---
 
-<Layout title="Hogar Gallán • Casa Rural en Gondomar, Galicia" description="Escápate a Hogar Gallán, chalet exclusivo para 8 personas con piscina privada en las Rías Baixas. Reserva directa con mejor precio y experiencia personalizada.">
-  
-  <!-- Navbar -->
+<Layout
+  title="Hogar Gallán • Casa rural en Gondomar, Galicia"
+  description="Chalet exclusivo para 8 personas con piscina privada en las Rías Baixas. Reserva directa, sin comisiones."
+>
+  <!-- NAVBAR -->
   <nav class="bg-white border-b border-[#e5d9c8] sticky top-0 z-50">
     <div class="max-w-screen-2xl mx-auto px-8 py-5 flex items-center justify-between">
       <div class="flex items-center gap-x-3">
@@ -18,89 +57,95 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <div class="hidden md:flex items-center gap-x-9 text-sm font-medium">
-        <a href="#sobre" class="hover:text-[#c9a16e] transition-colors">El Alojamiento</a>
+        <a href="#sobre" class="hover:text-[#c9a16e] transition-colors">El alojamiento</a>
         <a href="#galeria" class="hover:text-[#c9a16e] transition-colors">Galería</a>
         <a href="#disponibilidad" class="hover:text-[#c9a16e] transition-colors">Disponibilidad</a>
-        <a href="#como-reservar" class="hover:text-[#c9a16e] transition-colors">Cómo reservar</a>
       </div>
 
       <div class="flex items-center gap-x-3">
-        <button onclick="document.getElementById('gestor-modal').classList.remove('hidden'); document.getElementById('gestor-modal').classList.add('flex')"
-                class="hidden md:flex items-center gap-x-2 px-5 py-2.5 text-xs font-semibold tracking-wider border border-[#1a3c34] text-[#1a3c34] rounded-full hover:bg-[#1a3c34] hover:text-white transition-colors">
-          <span>GESTOR</span>
+        <button
+          id="btn-abrir-gestor"
+          class="hidden md:flex items-center px-5 py-2.5 text-xs font-semibold tracking-wider border border-[#1a3c34] text-[#1a3c34] rounded-full hover:bg-[#1a3c34] hover:text-white transition-colors"
+        >
+          GESTOR
         </button>
-        
-        <a href="#disponibilidad" 
-           class="bg-[#1a3c34] hover:bg-[#142d27] text-white text-sm font-semibold px-6 py-3 rounded-full flex items-center gap-x-2 shadow-lg transition-colors">
-          RESERVAR AHORA
+        <a
+          href="#disponibilidad"
+          class="bg-[#1a3c34] hover:bg-[#142d27] text-white text-sm font-semibold px-6 py-3 rounded-full shadow-lg transition-colors"
+        >
+          RESERVAR
         </a>
       </div>
     </div>
   </nav>
 
   <!-- HERO -->
-  <header class="h-[100dvh] min-h-[640px] flex items-center relative bg-cover bg-center" 
-          style="background-image: linear-gradient(rgba(26, 60, 52, 0.35), rgba(26, 60, 52, 0.45)), url('/images/001 house.jpg')">
-    <div class="max-w-screen-2xl mx-auto px-8 pt-16">
+  <header class="relative h-[100dvh] min-h-[640px] flex items-center overflow-hidden">
+    <Image
+      src={casa01}
+      alt="Hogar Gallán al atardecer"
+      widths={[900, 1400, 2000]}
+      sizes="100vw"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-[#1a3c34]/40 to-[#1a3c34]/60"></div>
+
+    <div class="relative max-w-screen-2xl mx-auto px-8 pt-16 w-full">
       <div class="max-w-2xl">
         <div class="inline-flex items-center gap-x-2 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full mb-6 text-xs tracking-[2px] font-semibold text-[#1a3c34]">
-          <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
           DISPONIBLE • TEMPORADA 2026
         </div>
-        
-        <h1 class="text-[72px] md:text-[86px] leading-[0.92] tracking-[-4.5px] text-white mb-4 font-bold">
-          Tu refugio<br>en las Rías Baixas
+
+        <h1 class="text-[56px] md:text-[86px] leading-[0.92] tracking-[-3px] md:tracking-[-4.5px] text-white mb-4 font-bold">
+          Tu refugio<br />en las Rías Baixas
         </h1>
-        
+
         <p class="max-w-md text-lg text-white/90 mb-9">
-          Chalet exclusivo para 8 personas con piscina privada, jardín y vistas a la sierra. 
-          A 15 minutos de las mejores playas de Galicia.
+          Chalet exclusivo para 8 personas con piscina privada, jardín y vistas a la sierra.
+          A 15 minutos de las playas.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="#disponibilidad" 
-             class="group inline-flex items-center justify-center gap-x-3 bg-white text-[#1a3c34] hover:bg-[#f8f1e9] font-semibold px-9 py-4 rounded-2xl text-base shadow-xl transition-all">
-            Comprobar disponibilidad
-          </a>
-          
-          <button onclick="window.open('https://wa.me/34617345289?text=Hola%2C%20estoy%20interesado%20en%20reservar%20Hogar%20Gall%C3%A1n', '_blank')"
-                  class="inline-flex items-center justify-center gap-x-3 border-2 border-white/70 hover:bg-white/10 text-white font-medium px-8 py-4 rounded-2xl text-base backdrop-blur transition">
-            Hablar por WhatsApp
-          </button>
-        </div>
+        <a
+          href="#disponibilidad"
+          class="inline-block bg-white text-[#1a3c34] font-semibold px-8 py-4 rounded-full hover:bg-[#f8f5f0] transition-colors"
+        >
+          Ver disponibilidad
+        </a>
       </div>
     </div>
   </header>
 
   <!-- SOBRE -->
-  <section id="sobre" class="max-w-screen-2xl mx-auto px-8 pt-20 pb-16">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 items-center">
+  <section id="sobre" class="max-w-screen-2xl mx-auto px-8 py-20">
+    <div class="grid lg:grid-cols-12 gap-12 items-center">
       <div class="lg:col-span-7">
-        <div class="uppercase tracking-[3px] text-xs font-semibold text-[#c9a16e] mb-3">DESDE 2021 • VUT-PO-005628</div>
-        <h2 class="text-5xl md:text-6xl leading-none tracking-[-2.5px] text-[#1a3c34] mb-6">Una casa con alma<br>en el corazón de Galicia</h2>
-        
-        <div class="prose prose-lg max-w-none text-[#3f3730] text-[17px] leading-relaxed">
-          <p>Hogar Gallán es mucho más que un alojamiento. Es un refugio privado de 400 m² rodeado de naturaleza, donde el tiempo se detiene. Ubicado en la Serra do Galiñeiro, a solo 15 minutos de las playas de las Rías Baixas y 20 minutos de Vigo.</p>
-          <p class="mt-4">Con 4 dormitorios, 3 baños, cocina totalmente equipada, piscina privada, zona de barbacoa y amplios espacios interiores y exteriores, es el lugar ideal para familias, grupos de amigos o escapadas románticas.</p>
-        </div>
+        <div class="text-[#c9a16e] text-xs tracking-[2.5px] font-semibold">EL ALOJAMIENTO</div>
+        <h2 class="text-4xl md:text-5xl tracking-[-2px] text-[#1a3c34] mt-2 mb-6">
+          Una casa de piedra<br />al pie del Galiñeiro
+        </h2>
+        <p class="text-[#6b6259] leading-relaxed max-w-lg">
+          Cuatro dormitorios, cocina completa, parrilla y una piscina que no comparte nadie más
+          que tú. La sierra empieza en la puerta y la costa está a un cuarto de hora.
+        </p>
 
-        <div class="mt-8 flex flex-wrap gap-3">
-          <div class="inline-flex items-center gap-x-2 bg-white border border-[#e5d9c8] px-5 h-11 rounded-2xl text-sm">
-            <span class="font-medium">Hasta 8 personas</span>
-          </div>
-          <div class="inline-flex items-center gap-x-2 bg-white border border-[#e5d9c8] px-5 h-11 rounded-2xl text-sm">
-            <span class="font-medium">400 m² de exclusividad</span>
-          </div>
-          <div class="inline-flex items-center gap-x-2 bg-white border border-[#e5d9c8] px-5 h-11 rounded-2xl text-sm">
-            <span class="font-medium">Piscina privada</span>
-          </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-10">
+          <div><div class="text-3xl font-semibold text-[#1a3c34]">8</div><div class="text-xs text-[#8a7560] mt-1">HUÉSPEDES</div></div>
+          <div><div class="text-3xl font-semibold text-[#1a3c34]">4</div><div class="text-xs text-[#8a7560] mt-1">DORMITORIOS</div></div>
+          <div><div class="text-3xl font-semibold text-[#1a3c34]">15</div><div class="text-xs text-[#8a7560] mt-1">MIN. A LA PLAYA</div></div>
+          <div><div class="text-3xl font-semibold text-[#1a3c34]">0 %</div><div class="text-xs text-[#8a7560] mt-1">COMISIÓN</div></div>
         </div>
       </div>
 
       <div class="lg:col-span-5">
-        <img src="/images/002 house.jpg" 
-             class="w-full h-[420px] object-cover rounded-3xl shadow-2xl border border-white" 
-             alt="Hogar Gallán - Casa de piedra con piscina privada">
+        <Image
+          src={casa02}
+          alt="Hogar Gallán, casa de piedra con piscina privada"
+          widths={[600, 900]}
+          sizes="(max-width: 1024px) 100vw, 40vw"
+          class="w-full h-[420px] object-cover rounded-3xl shadow-2xl"
+        />
       </div>
     </div>
   </section>
@@ -110,87 +155,43 @@ import Layout from '../layouts/Layout.astro';
     <div class="max-w-screen-2xl mx-auto px-8">
       <div class="text-center mb-10">
         <div class="text-[#c9a16e] text-xs tracking-[2.5px] font-semibold">DESCUBRE EL ESPACIO</div>
-        <h3 class="text-4xl tracking-[-1.5px] text-[#1a3c34] mt-2">Galería de Hogar Gallán</h3>
+        <h3 class="text-4xl tracking-[-1.5px] text-[#1a3c34] mt-2">Galería</h3>
       </div>
 
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md">
-          <img src="/images/001 house.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fachada principal">
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-4 text-white text-sm font-semibold">Casa principal • Piscina privada</div>
-        </div>
-        <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md">
-          <img src="/images/002 pool.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Piscina privada">
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-4 text-white text-sm font-semibold">Piscina privada • Solárium</div>
-        </div>
-        <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md">
-          <img src="/images/0003 outside.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Terraza">
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-4 text-white text-sm font-semibold">Terraza con vistas</div>
-        </div>
-        <div class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md">
-          <img src="/images/0003 interior.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Salón">
-          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-4 text-white text-sm font-semibold">Salón principal</div>
-        </div>
+        {galeria.map((item) => (
+          <figure class="group relative overflow-hidden rounded-3xl aspect-[4/3] shadow-md">
+            <Image
+              src={item.img}
+              alt={item.alt}
+              widths={[400, 700]}
+              sizes="(max-width: 768px) 50vw, 25vw"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white text-sm font-semibold">
+              {item.pie}
+            </figcaption>
+          </figure>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- CARACTERÍSTICAS / AMENIDADES -->
+  <!-- AMENIDADES -->
   <section class="max-w-screen-2xl mx-auto px-8 py-16">
-    <div class="flex justify-between items-end mb-10">
-      <div>
-        <div class="text-[#c9a16e] text-xs tracking-[2.5px] font-semibold">TODO INCLUIDO</div>
-        <h3 class="text-4xl tracking-[-1.5px] text-[#1a3c34]">Lo que encontrarás</h3>
-      </div>
+    <div class="mb-10">
+      <div class="text-[#c9a16e] text-xs tracking-[2.5px] font-semibold">TODO INCLUIDO</div>
+      <h3 class="text-4xl tracking-[-1.5px] text-[#1a3c34]">Lo que encontrarás</h3>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🏊</div>
-        <div class="font-semibold text-lg">Piscina privada</div>
-        <div class="text-sm text-[#6b6259] mt-1">Uso exclusivo • Solárium • Vistas a la sierra</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🔥</div>
-        <div class="font-semibold text-lg">Barbacoa &amp; Parrilla</div>
-        <div class="text-sm text-[#6b6259] mt-1">Zona exterior equipada para asados gallegos</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🍳</div>
-        <div class="font-semibold text-lg">Cocina completa</div>
-        <div class="text-sm text-[#6b6259] mt-1">Horno, lavavajillas, cafetera y todo lo necesario</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🛏️</div>
-        <div class="font-semibold text-lg">4 dormitorios</div>
-        <div class="text-sm text-[#6b6259] mt-1">Camas de calidad • Hasta 8 huéspedes</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">📶</div>
-        <div class="font-semibold text-lg">WiFi de alta velocidad</div>
-        <div class="text-sm text-[#6b6259] mt-1">Fibra óptica • Ideal para teletrabajo</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🚗</div>
-        <div class="font-semibold text-lg">Parking privado</div>
-        <div class="text-sm text-[#6b6259] mt-1">Amplio espacio para varios vehículos</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🐕</div>
-        <div class="font-semibold text-lg">Mascotas bienvenidas</div>
-        <div class="text-sm text-[#6b6259] mt-1">Espacio seguro para tus compañeros</div>
-      </div>
-      
-      <div class="amenity-card bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
-        <div class="text-3xl mb-4">🚲</div>
-        <div class="font-semibold text-lg">Alquiler de bicicletas</div>
-        <div class="text-sm text-[#6b6259] mt-1">Explora los senderos de la sierra</div>
-      </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {amenidades.map((a) => (
+        <div class="bg-[#f8f5f0] p-6 rounded-3xl border border-[#e5d9c8]">
+          <Icon name={a.icon} class="w-7 h-7 text-[#1a3c34] mb-4" />
+          <div class="font-semibold text-lg text-[#1a3c34]">{a.titulo}</div>
+          <div class="text-sm text-[#6b6259] mt-1">{a.texto}</div>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -198,25 +199,24 @@ import Layout from '../layouts/Layout.astro';
   <section id="disponibilidad" class="max-w-screen-2xl mx-auto px-8 py-20">
     <div class="max-w-3xl mx-auto text-center">
       <h2 class="text-4xl tracking-[-1.5px] text-[#1a3c34]">Elige tus fechas</h2>
-      <p class="text-[#6b6259] mt-3">Reserva directamente y obtén el mejor precio + atención personalizada.</p>
+      <p class="text-[#6b6259] mt-3">Reserva directa: mejor precio y trato personal.</p>
     </div>
 
-    <!-- Formulario simple -->
     <div class="max-w-2xl mx-auto mt-10 bg-white border border-[#e5d9c8] rounded-3xl p-8">
       <form id="booking-form">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label class="block text-xs font-semibold tracking-wider text-[#8a7560] mb-2">FECHA DE LLEGADA</label>
-            <input type="date" id="checkin" class="w-full border border-[#d4c8b8] rounded-2xl px-5 py-3.5" required>
+            <label for="checkin" class="block text-xs font-semibold tracking-wider text-[#8a7560] mb-2">FECHA DE LLEGADA</label>
+            <input type="date" id="checkin" class="w-full border border-[#d4c8b8] rounded-2xl px-5 py-3.5" required />
           </div>
           <div>
-            <label class="block text-xs font-semibold tracking-wider text-[#8a7560] mb-2">FECHA DE SALIDA</label>
-            <input type="date" id="checkout" class="w-full border border-[#d4c8b8] rounded-2xl px-5 py-3.5" required>
+            <label for="checkout" class="block text-xs font-semibold tracking-wider text-[#8a7560] mb-2">FECHA DE SALIDA</label>
+            <input type="date" id="checkout" class="w-full border border-[#d4c8b8] rounded-2xl px-5 py-3.5" required />
           </div>
         </div>
 
         <div class="mt-6">
-          <label class="block text-xs font-semibold tracking-wider text-[#8a7560] mb-2">HUÉSPEDES</label>
+          <label for="guests" class="block text-xs font-semibold tracking-wider text-[#8a7560] mb-2">HUÉSPEDES</label>
           <select id="guests" class="w-full border border-[#d4c8b8] rounded-2xl px-5 py-3.5">
             <option value="2">2 huéspedes</option>
             <option value="4">4 huéspedes</option>
@@ -225,25 +225,21 @@ import Layout from '../layouts/Layout.astro';
           </select>
         </div>
 
-        <div class="mt-8 flex flex-col sm:flex-row gap-4">
-          <button type="submit" 
-                  class="flex-1 bg-[#1a3c34] text-white font-semibold py-4 rounded-2xl">
-            Comprobar disponibilidad
-          </button>
-          <button type="button" onclick="window.open('https://wa.me/34617345289', '_blank')"
-                  class="flex-1 border border-[#1a3c34] text-[#1a3c34] font-semibold py-4 rounded-2xl">
-            Reservar por WhatsApp
-          </button>
-        </div>
+        <button type="submit" class="mt-8 w-full bg-[#1a3c34] hover:bg-[#142d27] text-white font-semibold py-4 rounded-2xl transition-colors">
+          Comprobar disponibilidad
+        </button>
       </form>
+      <div id="availability-result"></div>
     </div>
   </section>
 
   <!-- CÓMO RESERVAR -->
-  <section id="como-reservar" class="bg-[#1a3c34] text-white py-16">
+  <section class="bg-[#1a3c34] text-white py-16">
     <div class="max-w-screen-2xl mx-auto px-8 text-center">
-      <h2 class="text-4xl tracking-[-1.5px]">Reserva directa.<br>Experiencia única.</h2>
-      <p class="mt-4 max-w-md mx-auto text-white/80">Elige tus fechas → Confirma por WhatsApp → Recibe enlace de pago seguro con Stripe.</p>
+      <h2 class="text-4xl tracking-[-1.5px]">Reserva directa</h2>
+      <p class="mt-4 max-w-lg mx-auto text-white/80">
+        Eliges fechas, lo confirmamos por WhatsApp y recibes un enlace de pago seguro.
+      </p>
     </div>
   </section>
 
@@ -257,63 +253,59 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <span class="font-bold text-2xl tracking-tight text-white">Hogar Gallán</span>
         </div>
-        <div class="text-sm max-w-xs">
-          Lugar Vilas, 17<br>
-          36389 Gondomar, Pontevedra<br>
-          Galicia, España
-        </div>
-        
-        <div class="mt-6 flex gap-x-4 text-xl">
-          <a href="https://wa.me/34617345289" target="_blank" class="hover:text-white">📱</a>
-          <a href="https://www.instagram.com/hogargallan" target="_blank" class="hover:text-white">📷</a>
+        <address class="text-sm max-w-xs not-italic">
+          Lugar Vilas, 17<br />36389 Gondomar, Pontevedra<br />Galicia, España
+        </address>
+
+        <div class="mt-6 flex gap-x-4">
+          <a href="https://wa.me/34617345289" target="_blank" rel="noopener" aria-label="WhatsApp" class="hover:text-white transition-colors">
+            <Icon name="whatsapp" class="w-6 h-6" />
+          </a>
+          <a href="https://www.instagram.com/hogargallan" target="_blank" rel="noopener" aria-label="Instagram" class="hover:text-white transition-colors">
+            <Icon name="instagram" class="w-6 h-6" />
+          </a>
         </div>
       </div>
-      
+
       <div class="md:col-span-3 text-sm">
         <div class="font-semibold text-white mb-3 tracking-wider text-xs">CONTACTO DIRECTO</div>
         <a href="tel:+34617345289" class="block hover:text-white">+34 617 345 289</a>
         <a href="mailto:reservas@hogargallan.com" class="block hover:text-white mt-1">reservas@hogargallan.com</a>
       </div>
-      
+
       <div class="md:col-span-4 text-xs text-white/60 leading-relaxed">
-        Después de reservar, encontrarás todos los datos del alojamiento, número de teléfono de emergencia y la dirección exacta en tu confirmación de reserva.
-        <br><br>
+        Recibirás la dirección exacta y el teléfono de emergencia en tu confirmación de reserva.
+        <br /><br />
         <span class="text-white/40">© Hogar Gallán 2026 • VUT-PO-005628</span>
       </div>
     </div>
   </footer>
 
-  <!-- MODAL GESTOR DE RESERVAS -->
-  <div id="gestor-modal" onclick="if (event.target.id === 'gestor-modal') closeGestor()" class="hidden fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
-    <div onclick="event.stopImmediatePropagation()" class="bg-white w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl max-h-[92dvh] flex flex-col">
-      
-      <div class="px-8 py-5 border-b flex items-center justify-between bg-[#1a3c34] text-white">
+  <!-- MODAL GESTOR -->
+  <div id="gestor-modal" class="hidden fixed inset-0 bg-black/70 z-[100] items-center justify-center p-4">
+    <div class="bg-white w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl max-h-[92dvh] flex flex-col">
+      <div class="px-8 py-5 flex items-center justify-between bg-[#1a3c34] text-white">
         <div class="flex items-center gap-x-3">
-          <span class="font-semibold tracking-tight">Gestor de Reservas</span>
-          <span class="text-xs text-white/60">Hogar Gallán • Panel privado</span>
+          <span class="font-semibold tracking-tight">Gestor de reservas</span>
+          <span class="text-xs text-white/60">Panel privado</span>
         </div>
-        <button onclick="closeGestor()" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+        <button id="btn-cerrar-gestor" aria-label="Cerrar" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
       </div>
 
       <div class="p-8 overflow-auto flex-1">
-        <!-- Login -->
         <div id="gestor-login">
           <div class="max-w-xs mx-auto text-center py-8">
-            <div class="text-4xl mb-4">🔒</div>
+            <Icon name="candado" class="w-9 h-9 mx-auto mb-4 text-[#1a3c34]" />
             <div class="font-semibold mb-1">Acceso restringido</div>
             <p class="text-sm text-[#6b6259]">Introduce la contraseña del gestor</p>
-            
             <div class="mt-6">
-              <input id="gestor-password" type="password" value="gallan2026" 
-                     class="w-full border px-4 py-3 rounded-2xl text-center font-mono tracking-[3px] text-sm">
-              <button onclick="loginGestor()" 
-                      class="mt-3 w-full bg-[#1a3c34] text-white py-3 rounded-2xl text-sm font-semibold">ACCEDER AL PANEL</button>
-              <div class="text-[10px] text-[#8a7560] mt-2">Contraseña demo: gallan2026</div>
+              <input id="gestor-password" type="password" class="w-full border border-[#d4c8b8] px-4 py-3 rounded-2xl text-center font-mono tracking-[3px] text-sm" />
+              <button id="btn-login-gestor" class="mt-3 w-full bg-[#1a3c34] text-white py-3 rounded-2xl text-sm font-semibold">ACCEDER</button>
+              <p id="gestor-error" class="hidden text-xs text-red-600 mt-2">Contraseña incorrecta.</p>
             </div>
           </div>
         </div>
 
-        <!-- Dashboard -->
         <div id="gestor-dashboard" class="hidden">
           <div class="flex justify-between items-center mb-6">
             <div>
@@ -321,319 +313,262 @@ import Layout from '../layouts/Layout.astro';
               <div class="text-2xl font-semibold text-[#1a3c34]">Reservas</div>
             </div>
             <div class="flex gap-x-2">
-              <button onclick="addNewReservation()" 
-                      class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-full flex items-center gap-x-2">
-                + NUEVA RESERVA
-              </button>
-              <button onclick="exportReservations()" 
-                      class="px-4 py-2 border text-xs font-semibold rounded-full flex items-center gap-x-2">
-                EXPORTAR
-              </button>
+              <button id="btn-nueva-reserva" class="px-5 py-2 bg-[#1a3c34] hover:bg-[#142d27] text-white text-xs font-semibold rounded-full">+ NUEVA</button>
+              <button id="btn-exportar" class="px-4 py-2 border border-[#d4c8b8] text-xs font-semibold rounded-full">EXPORTAR</button>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="grid grid-cols-2 gap-4 mb-8">
             <div class="bg-[#f8f5f0] p-4 rounded-2xl">
               <div class="text-xs text-[#8a7560]">RESERVAS ACTIVAS</div>
               <div class="text-3xl font-semibold text-[#1a3c34] mt-1" id="stat-active">0</div>
             </div>
             <div class="bg-[#f8f5f0] p-4 rounded-2xl">
-              <div class="text-xs text-[#8a7560]">INGRESOS ESTIMADOS</div>
-              <div class="text-3xl font-semibold text-emerald-700 mt-1" id="stat-revenue">€0</div>
+              <div class="text-xs text-[#8a7560]">INGRESOS COBRADOS</div>
+              <div class="text-3xl font-semibold text-[#1a3c34] mt-1" id="stat-revenue">€0</div>
             </div>
           </div>
 
-          <div class="text-xs uppercase tracking-widest mb-3 text-[#8a7560]">RESERVAS ACTUALES</div>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
-                <tr class="border-b text-left text-xs text-[#8a7560]">
+                <tr class="border-b border-[#e5d9c8] text-left text-xs text-[#8a7560]">
                   <th class="py-3 pr-4 font-normal">Huésped</th>
                   <th class="py-3 px-4 font-normal">Fechas</th>
-                  <th class="py-3 px-4 font-normal">Personas</th>
+                  <th class="py-3 px-4 font-normal">Pax</th>
                   <th class="py-3 px-4 font-normal">Origen</th>
                   <th class="py-3 px-4 font-normal">Estado</th>
                   <th class="py-3 pl-4 font-normal"></th>
                 </tr>
               </thead>
-              <tbody id="reservations-table" class="text-[#2c2522]">
-              </tbody>
+              <tbody id="reservations-table"></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 </Layout>
 
 <script>
-  // === BOOKING FORM ===
-  const form = document.getElementById('booking-form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const checkin = document.getElementById('checkin').value;
-      const checkout = document.getElementById('checkout').value;
-      const guests = document.getElementById('guests').value;
+  // Este script se compila como MÓDULO. Por eso ya no hay onclick="..." en el
+  // HTML: dentro de un módulo las funciones no son globales, así que los
+  // onclick funcionaban en `astro dev` y reventaban al desplegar. Todo va ahora
+  // por addEventListener, que es lo correcto.
 
-      if (!checkin || !checkout) {
-        alert("Por favor selecciona las fechas de entrada y salida.");
-        return;
-      }
+  const WHATSAPP = '34617345289';
+  const PRECIO_NOCHE = 245;
+  const PASSWORD = 'gallan2026';
 
-      // Simple availability simulation
-      const resultDiv = document.createElement('div');
-      resultDiv.className = 'mt-6 p-6 bg-[#f8f5f0] border border-[#e5d9c8] rounded-2xl';
-      
-      const nights = Math.ceil((new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24));
-      const price = nights * 245;
+  type Estado = 'Pendiente' | 'Confirmada' | 'Cancelada';
+  type Reserva = {
+    id: number;
+    nombre: string;
+    checkin: string;
+    checkout: string;
+    pax: number;
+    origen: string;
+    estado: Estado;
+    pagada: boolean;
+    total: number;
+  };
 
-      resultDiv.innerHTML = `
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4">
-          <div>
-            <div class="font-semibold text-emerald-700 flex items-center gap-x-2">
-              ✅ ¡DISPONIBLE!
-            </div>
-            <div class="text-sm mt-1">${nights} noches • ${guests} personas</div>
-            <div class="text-xs text-[#8a7560] mt-0.5">Precio total estimado: <span class="font-semibold text-[#1a3c34]">€${price}</span></div>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <button onclick="startWhatsAppReservation('${checkin}', '${checkout}', ${guests})" 
-                    class="px-6 py-3 text-sm font-semibold bg-[#25D366] hover:bg-[#128C7E] text-white rounded-2xl flex items-center justify-center gap-x-2">
-              Confirmar por WhatsApp
-            </button>
-            <button onclick="simulateStripeCheckout('${checkin}', '${checkout}', ${guests}, ${price})" 
-                    class="px-6 py-3 text-sm font-semibold border border-[#1a3c34] text-[#1a3c34] hover:bg-[#1a3c34] hover:text-white rounded-2xl flex items-center justify-center gap-x-2 transition">
-              Pagar con Stripe (demo)
-            </button>
-          </div>
-        </div>
-      `;
-      
-      // Remove previous result if exists
-      const oldResult = document.getElementById('availability-result');
-      if (oldResult) oldResult.remove();
-      
-      resultDiv.id = 'availability-result';
-      form.appendChild(resultDiv);
-    });
-  }
+  const $ = (id: string) => document.getElementById(id);
 
-  function startWhatsAppReservation(checkin, checkout, guests) {
-    const message = encodeURIComponent(`Hola! Quiero reservar Hogar Gallán.\n\nFechas: ${checkin} → ${checkout}\nHuéspedes: ${guests}\n\nPor favor confírmame disponibilidad y envíame el enlace de pago. ¡Gracias!`);
-    window.open(`https://wa.me/34617345289?text=${message}`, '_blank');
-  }
+  /* ---------- Formulario de disponibilidad ---------- */
+  const form = $('booking-form') as HTMLFormElement | null;
+  const resultado = $('availability-result');
 
-  function simulateStripeCheckout(checkin, checkout, guests, total) {
-    const modal = document.createElement('div');
-    modal.className = `fixed inset-0 bg-black/70 z-[200] flex items-center justify-center p-4`;
-    modal.innerHTML = `
-      <div class="bg-white w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
-        <div class="px-6 py-5 border-b flex justify-between items-center">
-          <div class="font-semibold">Checkout • Hogar Gallán</div>
-          <button class="text-2xl leading-none text-gray-400 hover:text-gray-600" onclick="this.closest('.fixed').remove()">&times;</button>
-        </div>
-        
-        <div class="p-6">
-          <div class="text-sm mb-4">Resumen de tu reserva</div>
-          
-          <div class="bg-[#f8f5f0] rounded-2xl p-4 text-sm space-y-1 mb-5">
-            <div class="flex justify-between"><span>Fechas</span> <span class="font-medium">${checkin} → ${checkout}</span></div>
-            <div class="flex justify-between"><span>Huéspedes</span> <span class="font-medium">${guests} personas</span></div>
-            <div class="flex justify-between pt-2 border-t"><span>Total</span> <span class="font-semibold">€${total}</span></div>
-          </div>
-          
-          <div class="text-xs text-center text-[#8a7560] mb-4">Esto es una simulación. En producción se usaría Stripe Checkout real.</div>
-          
-          <button onclick="completeFakePayment(this)" 
-                  class="w-full py-3.5 bg-[#635bff] hover:bg-[#5247e0] text-white font-semibold rounded-2xl flex items-center justify-center gap-x-2">
-            PAGAR €${total} CON STRIPE (DEMO)
-          </button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-  }
-  
-  function completeFakePayment(btn) {
-    btn.innerHTML = `⏳ PROCESANDO...`;
-    setTimeout(() => {
-      btn.closest('.fixed').remove();
-      const success = document.createElement('div');
-      success.className = `fixed bottom-6 right-6 bg-emerald-600 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-x-3 z-[300]`;
-      success.innerHTML = `
-        <span class="text-xl">✅</span>
-        <div>
-          <div class="font-semibold">¡Pago completado!</div>
-          <div class="text-xs opacity-90">Te hemos enviado la confirmación por email y WhatsApp.</div>
-        </div>
-      `;
-      document.body.appendChild(success);
-      setTimeout(() => success.remove(), 4500);
-    }, 1200);
-  }
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const checkin = ($('checkin') as HTMLInputElement).value;
+    const checkout = ($('checkout') as HTMLInputElement).value;
+    const pax = ($('guests') as HTMLSelectElement).value;
+    if (!checkin || !checkout || !resultado) return;
 
-  // === GESTOR DE RESERVAS ===
-  let reservations = [];
-
-  function loadReservations() {
-    const saved = localStorage.getItem('hogarGallanReservations');
-    if (saved) {
-      reservations = JSON.parse(saved);
-    } else {
-      reservations = [
-        { id: Date.now()-100000, name: "Familia López", checkin: "2026-02-07", checkout: "2026-02-14", guests: 6, source: "Web", status: "Confirmada", paid: true, total: 1715 },
-        { id: Date.now()-50000, name: "Grupo Marta", checkin: "2026-02-20", checkout: "2026-02-23", guests: 4, source: "Airbnb", status: "Pendiente", paid: false, total: 735 }
-      ];
-      localStorage.setItem('hogarGallanReservations', JSON.stringify(reservations));
-    }
-  }
-
-  function saveReservations() {
-    localStorage.setItem('hogarGallanReservations', JSON.stringify(reservations));
-  }
-
-  function renderReservationsTable() {
-    const tbody = document.getElementById('reservations-table');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    
-    if (reservations.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-[#8a7560]">No hay reservas.</td></tr>`;
+    const noches = Math.round((+new Date(checkout) - +new Date(checkin)) / 86400000);
+    if (noches < 1) {
+      resultado.innerHTML =
+        '<p class="mt-6 p-4 bg-red-50 text-red-700 rounded-2xl text-sm">La salida tiene que ser posterior a la llegada.</p>';
       return;
     }
-    
-    reservations.forEach((res, index) => {
-      const row = document.createElement('tr');
-      row.className = `border-b last:border-none hover:bg-[#f8f5f0]`;
-      
-      const statusColor = res.status === 'Confirmada' ? 'bg-emerald-100 text-emerald-700' : 
-                         res.status === 'Pendiente' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100';
-      
-      row.innerHTML = `
-        <td class="py-4 pr-4 font-medium">${res.name}</td>
-        <td class="py-4 px-4 text-xs font-mono text-[#6b6259]">${res.checkin}<br>${res.checkout}</td>
-        <td class="py-4 px-4">${res.guests} pax</td>
-        <td class="py-4 px-4"><span class="text-xs px-3 py-0.5 rounded-full bg-white border">${res.source}</span></td>
-        <td class="py-4 px-4">
-          <span onclick="toggleStatus(${index})" class="cursor-pointer text-xs px-3.5 py-1 rounded-full font-medium ${statusColor}">
-            ${res.status}
-          </span>
-        </td>
-        <td class="py-4 pl-4 text-right">
-          <div class="flex items-center justify-end gap-x-3 text-xs">
-            ${res.paid ? `<span class="text-emerald-600">✓</span>` : 
-              `<button onclick="markAsPaid(${index}, event)" class="text-emerald-600 hover:underline">Pagar</button>`}
-            <button onclick="deleteReservation(${index}, event)" class="text-red-400 hover:text-red-600">🗑</button>
-          </div>
-        </td>
-      `;
-      tbody.appendChild(row);
-    });
-    
-    // Update stats
-    const activeEl = document.getElementById('stat-active');
-    const revenueEl = document.getElementById('stat-revenue');
-    if (activeEl) activeEl.innerText = reservations.length;
-    if (revenueEl) {
-      const revenue = reservations.reduce((sum, r) => sum + (r.paid ? r.total : 0), 0);
-      revenueEl.innerText = '€' + revenue.toLocaleString('es-ES');
+
+    const total = noches * PRECIO_NOCHE;
+    const texto = encodeURIComponent(
+      `Hola, quiero reservar Hogar Gallán.\n\nEntrada: ${checkin}\nSalida: ${checkout}\nHuéspedes: ${pax}\n\n¿Me confirmáis disponibilidad y me enviáis el enlace de pago?`
+    );
+
+    resultado.innerHTML = `
+      <div class="mt-6 p-6 bg-[#f8f5f0] border border-[#e5d9c8] rounded-2xl">
+        <p class="font-semibold text-[#1a3c34]">Fechas solicitadas</p>
+        <p class="text-sm mt-1">${noches} noche${noches > 1 ? 's' : ''} · ${pax} huéspedes</p>
+        <p class="text-sm text-[#8a7560] mt-0.5">Precio orientativo: <span class="font-semibold text-[#1a3c34]">€${total}</span></p>
+        <a href="https://wa.me/${WHATSAPP}?text=${texto}" target="_blank" rel="noopener"
+           class="mt-5 block w-full text-center px-6 py-3.5 text-sm font-semibold bg-[#1a3c34] hover:bg-[#142d27] text-white rounded-2xl transition-colors">
+          Confirmar por WhatsApp
+        </a>
+        <p class="text-xs text-[#8a7560] mt-3 text-center">
+          Te confirmamos la disponibilidad real y te enviamos el enlace de pago.
+        </p>
+      </div>`;
+  });
+
+  const hoy = new Date().toISOString().split('T')[0];
+  ($('checkin') as HTMLInputElement | null)?.setAttribute('min', hoy);
+  ($('checkout') as HTMLInputElement | null)?.setAttribute('min', hoy);
+
+  /* ---------- Gestor ---------- */
+  let reservas: Reserva[] = [];
+
+  const cargar = () => {
+    try {
+      reservas = JSON.parse(localStorage.getItem('hg_reservas') || '[]');
+    } catch {
+      reservas = [];
     }
-  }
+  };
+  const guardar = () => localStorage.setItem('hg_reservas', JSON.stringify(reservas));
 
-  function toggleStatus(index) {
-    const statuses = ['Pendiente', 'Confirmada', 'Cancelada'];
-    const current = reservations[index].status;
-    const nextIndex = (statuses.indexOf(current) + 1) % statuses.length;
-    reservations[index].status = statuses[nextIndex];
-    saveReservations();
-    renderReservationsTable();
-  }
+  const iconoCheck =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-4 h-4"><path d="M20 6 9 17l-5-5"/></svg>';
+  const iconoPapelera =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
 
-  function markAsPaid(index, e) {
-    e.stopImmediatePropagation();
-    reservations[index].paid = true;
-    if (reservations[index].status === 'Pendiente') reservations[index].status = 'Confirmada';
-    saveReservations();
-    renderReservationsTable();
-  }
+  function pintar() {
+    const tbody = $('reservations-table');
+    if (!tbody) return;
 
-  function deleteReservation(index, e) {
-    e.stopImmediatePropagation();
-    if (!confirm('¿Eliminar esta reserva?')) return;
-    reservations.splice(index, 1);
-    saveReservations();
-    renderReservationsTable();
-  }
-
-  function addNewReservation() {
-    const name = prompt("Nombre del huésped / grupo:");
-    if (!name) return;
-    
-    const checkin = prompt("Fecha de entrada (YYYY-MM-DD):", "2026-03-12");
-    const checkout = prompt("Fecha de salida (YYYY-MM-DD):", "2026-03-16");
-    const guests = parseInt(prompt("Número de personas:", "4")) || 4;
-    const source = prompt("Origen (Web / WhatsApp / Airbnb / Booking):", "Web");
-    
-    const newRes = {
-      id: Date.now(),
-      name: name,
-      checkin: checkin,
-      checkout: checkout,
-      guests: guests,
-      source: source || "Web",
-      status: "Pendiente",
-      paid: false,
-      total: guests * 245 * 4
-    };
-    
-    reservations.unshift(newRes);
-    saveReservations();
-    renderReservationsTable();
-  }
-
-  function exportReservations() {
-    const dataStr = JSON.stringify(reservations, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', 'reservas_hogar_gallan.json');
-    linkElement.click();
-  }
-
-  function loginGestor() {
-    const pass = document.getElementById('gestor-password').value;
-    if (pass === 'gallan2026' || pass === 'admin') {
-      document.getElementById('gestor-login').classList.add('hidden');
-      document.getElementById('gestor-dashboard').classList.remove('hidden');
-      renderReservationsTable();
+    if (!reservas.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="6" class="py-8 text-center text-[#8a7560]">Todavía no hay reservas.</td></tr>';
     } else {
-      alert('Contraseña incorrecta. Prueba con: gallan2026');
+      tbody.innerHTML = reservas
+        .map((r, i) => {
+          const color =
+            r.estado === 'Confirmada'
+              ? 'bg-emerald-100 text-emerald-700'
+              : r.estado === 'Pendiente'
+                ? 'bg-amber-100 text-amber-700'
+                : 'bg-gray-100 text-gray-600';
+          const accionPago = r.pagada
+            ? `<span class="text-emerald-600" title="Pagada">${iconoCheck}</span>`
+            : `<button data-accion="pagar" data-i="${i}" class="text-xs text-emerald-700 hover:underline">Marcar pagada</button>`;
+          return `
+            <tr class="border-b border-[#e5d9c8] last:border-none hover:bg-[#f8f5f0]">
+              <td class="py-4 pr-4 font-medium">${r.nombre}</td>
+              <td class="py-4 px-4 text-xs font-mono text-[#6b6259]">${r.checkin}<br>${r.checkout}</td>
+              <td class="py-4 px-4">${r.pax}</td>
+              <td class="py-4 px-4"><span class="text-xs px-3 py-0.5 rounded-full bg-white border border-[#e5d9c8]">${r.origen}</span></td>
+              <td class="py-4 px-4">
+                <button data-accion="estado" data-i="${i}" class="text-xs px-3.5 py-1 rounded-full font-medium ${color}">${r.estado}</button>
+              </td>
+              <td class="py-4 pl-4">
+                <div class="flex items-center justify-end gap-x-3">
+                  ${accionPago}
+                  <button data-accion="borrar" data-i="${i}" aria-label="Eliminar" class="text-[#8a7560] hover:text-red-600">${iconoPapelera}</button>
+                </div>
+              </td>
+            </tr>`;
+        })
+        .join('');
     }
+
+    const activas = reservas.filter((r) => r.estado !== 'Cancelada').length;
+    const ingresos = reservas.reduce((s, r) => s + (r.pagada ? r.total : 0), 0);
+    const elActivas = $('stat-active');
+    const elIngresos = $('stat-revenue');
+    if (elActivas) elActivas.textContent = String(activas);
+    if (elIngresos) elIngresos.textContent = '€' + ingresos.toLocaleString('es-ES');
   }
 
-  function closeGestor() {
-    const modal = document.getElementById('gestor-modal');
-    modal.classList.remove('flex');
-    modal.classList.add('hidden');
-  }
+  // Delegación: la tabla se repinta entera, así que escuchamos en el padre.
+  $('reservations-table')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('button[data-accion]') as HTMLElement | null;
+    if (!btn) return;
+    const i = Number(btn.dataset.i);
+    const accion = btn.dataset.accion;
 
-  // Initialize gestor
-  function initGestor() {
-    loadReservations();
-    // Make gestor button work (already in HTML)
-  }
+    if (accion === 'estado') {
+      const ciclo: Estado[] = ['Pendiente', 'Confirmada', 'Cancelada'];
+      reservas[i].estado = ciclo[(ciclo.indexOf(reservas[i].estado) + 1) % 3];
+    } else if (accion === 'pagar') {
+      reservas[i].pagada = true;
+      if (reservas[i].estado === 'Pendiente') reservas[i].estado = 'Confirmada';
+    } else if (accion === 'borrar') {
+      if (!confirm('¿Eliminar esta reserva?')) return;
+      reservas.splice(i, 1);
+    }
+    guardar();
+    pintar();
+  });
 
-  // Boot
-  window.onload = function() {
-    initGestor();
-    
-    // Set min dates
-    const today = new Date().toISOString().split('T')[0];
-    const checkin = document.getElementById('checkin');
-    const checkout = document.getElementById('checkout');
-    if (checkin) checkin.min = today;
-    if (checkout) checkout.min = today;
-  }
+  $('btn-nueva-reserva')?.addEventListener('click', () => {
+    const nombre = prompt('Nombre del huésped o grupo:');
+    if (!nombre) return;
+    const checkin = prompt('Entrada (AAAA-MM-DD):') || '';
+    const checkout = prompt('Salida (AAAA-MM-DD):') || '';
+    const pax = parseInt(prompt('Personas:', '4') || '4', 10);
+    const origen = prompt('Origen (Web / WhatsApp / Airbnb / Booking):', 'Web') || 'Web';
+
+    const noches = Math.max(1, Math.round((+new Date(checkout) - +new Date(checkin)) / 86400000));
+    reservas.unshift({
+      id: Date.now(),
+      nombre,
+      checkin,
+      checkout,
+      pax,
+      origen,
+      estado: 'Pendiente',
+      pagada: false,
+      total: noches * PRECIO_NOCHE,
+    });
+    guardar();
+    pintar();
+  });
+
+  $('btn-exportar')?.addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(reservas, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'reservas-hogar-gallan.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  /* ---------- Modal ---------- */
+  const modal = $('gestor-modal');
+  const abrir = () => {
+    modal?.classList.remove('hidden');
+    modal?.classList.add('flex');
+  };
+  const cerrar = () => {
+    modal?.classList.add('hidden');
+    modal?.classList.remove('flex');
+  };
+
+  $('btn-abrir-gestor')?.addEventListener('click', abrir);
+  $('btn-cerrar-gestor')?.addEventListener('click', cerrar);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) cerrar();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrar();
+  });
+
+  const entrar = () => {
+    const pass = ($('gestor-password') as HTMLInputElement).value;
+    if (pass === PASSWORD) {
+      $('gestor-login')?.classList.add('hidden');
+      $('gestor-dashboard')?.classList.remove('hidden');
+      pintar();
+    } else {
+      $('gestor-error')?.classList.remove('hidden');
+    }
+  };
+  $('btn-login-gestor')?.addEventListener('click', entrar);
+  $('gestor-password')?.addEventListener('keydown', (e) => {
+    if ((e as KeyboardEvent).key === 'Enter') entrar();
+  });
+
+  cargar();
 </script>
