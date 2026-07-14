@@ -1,0 +1,46 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Casa rural exclusiva en Gondomar, Galicia. Piscina privada, 4 dormitorios y hasta 8 personas." } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Google Fonts: Cinzel (títulos) + Sora (texto) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+</head>
+<body class="font-sans bg-[#f8f5f0] text-[#2c2522]">
+  <slot />
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --font-titles: 'Cinzel', Georgia, serif;
+    --font-text: 'Sora', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, .section-title {
+    font-family: var(--font-titles);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  body, p, .font-text {
+    font-family: var(--font-text);
+  }
+</style>
